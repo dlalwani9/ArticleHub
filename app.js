@@ -54,7 +54,9 @@ app.get('/',(req,res)=>{
 });
 
 var articles=require('./route/articles');
+var users=require('./route/users');
 app.use('/articles',articles);
+app.use('/users',users);
 
 
 app.listen(3000,()=>{
