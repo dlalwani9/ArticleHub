@@ -1,7 +1,7 @@
 doctype html
 html
   head
-    title Knowledge Base
+    title Articlehub
     link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
     link(rel='stylesheet' href='/css/style.css')
   body
@@ -18,27 +18,28 @@ html
           ul.nav.navbar-nav
             li
               a(href='/') Home
-            li
-              a(href='/articles/add') Add Article
-          ul.nav.navbar-nav.navbar-right
-            if(user)
+            if user
               li
-                a(href='users/logout') Logout
+                a(href='/articles/add') Add Article
+          ul.nav.navbar-nav.navbar-right
+            if user
+              li 
+                a(href='/users/logout') Logout
             else
               li
-                a(href='/users/login') Login
-              li 
                 a(href='/users/register') Register
+              li
+                a(href='/users/login') Login
     .container
       != messages('message', locals)
       if errors
-        each error,i in errors
+        each error, i in errors
           div(class="alert alert-danger") #{error.msg}
       block content
       br
       hr
       footer
-       p Copyright &copy; 2017
-    script(src='/bower_components/jquery/dist/jquery.js')
+        p Copyright &copy; 2017
+    script(src='/bower_components/jquery/dist/jquery.js')  
     script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
-    script(src='/js/main.js')
+    script(src='/js/main.js') 
