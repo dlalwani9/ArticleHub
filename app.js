@@ -5,6 +5,7 @@ const {Article}=require('./models/article');
 var bodyParser=require('body-parser');
 var expressValidator=require('express-validator');
 var flash=require('connect-flash');
+const passport=require('passport');
 var session=require('express-session');
 
 var app=express();
@@ -41,8 +42,18 @@ app.use(expressValidator({
   }
 }));
 
+require('./config/passport')(passport);
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 app.set('views',path.join(__dirname,'views'));
 app.set('view engine','pug');
+
+app.get('*',(req,res,next)=>{
+  res.locals.user=req.user||null;
+  next();
+});
 
 app.get('/',(req,res)=>{
   Article.find({}).then((articles)=>{
