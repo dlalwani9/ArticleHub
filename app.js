@@ -9,6 +9,7 @@ const passport=require('passport');
 var session=require('express-session');
 
 var app=express();
+const port=process.env.PORT || 3000;
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname,'public')));
@@ -70,6 +71,6 @@ app.use('/articles',articles);
 app.use('/users',users);
 
 
-app.listen(3000,()=>{
-  console.log('Started on port 3000');
+app.listen(port,()=>{
+  console.log(`Started server on port ${port}`);
 });
