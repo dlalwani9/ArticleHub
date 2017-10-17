@@ -1,7 +1,7 @@
 # AricleHub
 
 A Web application which allows users to express their views by writing articles and also lets them view articles written by other users.
-A user needs to be registered in order to contribute articles. 
+A user needs to be registered in order to contribute articles. Have a look-[ArticleHub](https://articlehub.herokuapp.com/) 
 
 ### Installattion
 
