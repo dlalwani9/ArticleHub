@@ -21,6 +21,11 @@ html
             if user
               li
                 a(href='/articles/add') Add Article
+            li
+              a(href='/articles/gallery') Article Gallery
+            if user
+              li
+                a(href='/articles/personal') Your Articles
           ul.nav.navbar-nav.navbar-right
             if user
               li 

@@ -18,6 +18,28 @@ router.get('/gallery',(req,res)=>{
   }).catch((e)=>console.log(e));
 });
 
+router.get('/personal',(req,res)=>{
+  if(req.user){
+  Article.find({author:req.user._id}).then((articles)=>{
+    if(articles.length>0){
+    res.render('index',{
+      title:"Your Articles",
+      articles:articles
+    })
+  }
+  else{
+    req.flash('danger','Please write an article to view the page');
+    res.redirect('/articles/add');
+  }
+  }).catch((e)=>console.log(e));
+}
+else{
+  req.flash('danger','Please Log in to write articles');
+  res.redirect('/');
+}
+
+});
+
 router.get('/:id',(req,res)=>{
   Article.findById(req.params.id).then((article)=>{
     User.findById(article.author).then((user)=>{
