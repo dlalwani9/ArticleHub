@@ -30,23 +30,41 @@ router.post('/register',(req,res)=>{
     });
   }
   else{
-    let newUser=new User({
-          name:name,
-          email:email,
-          username:username,
-          password:password
-        });
+      User.findOne({email:req.body.email}).then((user)=>{
+        if(user){
+        //  console.log(user);
+        req.flash('danger','Email already exists');
+        res.render('register');
+        }
+        else{
+          User.findOne({username:req.body.username}).then((user)=>{
+            if(user){
+            req.flash('danger','Username already exists');
+            res.render('register');
+            }
+            else{
+              let newUser=new User({
+                    name:name,
+                    email:email,
+                    username:username,
+                    password:password
+                  });
 
-        bcrypt.genSalt(10).then((salt)=>{
-          bcrypt.hash(newUser.password,salt).then((hash)=>{
-            newUser.password=hash;
-            newUser.save().then(()=>{
-              req.flash('success','You are registered now and can log in');
-              res.redirect('/users/login')
-            }).catch((e)=>console.log(e));
+                  bcrypt.genSalt(10).then((salt)=>{
+                    bcrypt.hash(newUser.password,salt).then((hash)=>{
+                      newUser.password=hash;
+                      newUser.save().then(()=>{
+                        req.flash('success','You are registered now and can log in');
+                        res.redirect('/users/login')
+                      }).catch((e)=>console.log(e));
+                    }).catch((e)=>console.log(e));
+                  }).catch((e)=>console.log(e));
+            }
           }).catch((e)=>console.log(e));
-        }).catch((e)=>console.log(e));
-    }
+        }
+      }).catch((e)=>console.log(e));
+
+  }
 
 
 });
