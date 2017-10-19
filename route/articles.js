@@ -9,6 +9,15 @@ router.get('/add',ensureAuthenticated,(req,res)=>{
   });
 });
 
+router.get('/gallery',(req,res)=>{
+  Article.find({}).then((articles)=>{
+    res.render('index',{
+      title:"Articles",
+      articles:articles
+    })
+  }).catch((e)=>console.log(e));
+});
+
 router.get('/:id',(req,res)=>{
   Article.findById(req.params.id).then((article)=>{
     User.findById(article.author).then((user)=>{

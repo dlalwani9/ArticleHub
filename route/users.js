@@ -5,7 +5,13 @@ const bcrypt=require('bcryptjs');
 const passport=require('passport');
 
 router.get('/register',(req,res)=>{
+  if(req.user){
+    req.flash('danger','Already registered and logged in.');
+    res.redirect('/');
+  }
+  else{
   res.render('register');
+  }
 });
 
 router.post('/register',(req,res)=>{
@@ -70,13 +76,25 @@ router.post('/register',(req,res)=>{
 });
 
 router.get('/login',(req,res)=>{
+  if(req.user){
+    req.flash('danger','Already logged in');
+    res.redirect('/');
+  }
+  else{
   res.render('login');
+  }
 });
 
 router.get('/logout',(req,res)=>{
+  if(req.user){
   req.logout();
   req.flash('success','You have successfully logged out');
   res.redirect('/users/login');
+}
+else{
+  req.flash('danger','Not Logged In');
+  res.redirect('/');
+}
 });
 
 router.post('/login',(req,res,next)=>{

@@ -1,0 +1,49 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    meta(name='description', content='')
+    meta(name='author', content='')
+    title ArticleHub
+    // Bootstrap core CSS
+    link(href='https://getbootstrap.com/dist/css/bootstrap.min.css', rel='stylesheet')
+    // Custom styles for this template
+    link(href='https://getbootstrap.com/docs/4.0/examples/cover/cover.css', rel='stylesheet')
+  body
+    .site-wrapper
+      .site-wrapper-inner
+        .cover-container
+          .masthead.clearfix
+            .inner
+              h3.masthead-brand ArticleHub
+              nav.nav.nav-masthead
+                a.nav-link.active(href='/') Home
+                if !user
+                  a.nav-link(href='/articles/gallery') Article Gallery
+                if user
+                  a.nav-link(href='/users/logout') Logout
+          .container
+            != messages('message', locals)
+          .inner.cover
+            if !user
+              h1.cover-heading Welcome
+              p.lead
+                | ArticleHub is the Perfect destination for writing and reading articles. Click on register to start writing articles and unleash the writer within you. 
+              p.lead
+                a.btn.btn-lg.btn-secondary(href='/users/register') Register
+              p.lead
+                | Already a member?
+              p.lead
+                a.btn.btn-lg.btn-secondary(href='/users/login') Login
+            else
+              p.lead
+                | Click on Add article to contibute articles 
+              p.lead
+                a.btn.btn-lg.btn-secondary(href='/articles/add') Add Article
+              p.lead
+                | Click below to view articles by other users
+              p.lead
+                a.btn.btn-lg.btn-secondary(href='/articles/gallery') Article Gallery
+        
+              

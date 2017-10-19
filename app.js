@@ -57,12 +57,7 @@ app.get('*',(req,res,next)=>{
 });
 
 app.get('/',(req,res)=>{
-  Article.find({}).then((articles)=>{
-    res.render('index',{
-      title:"Articles",
-      articles:articles
-    })
-  }).catch((e)=>console.log(e));
+  res.render('home');
 });
 
 var articles=require('./route/articles');
