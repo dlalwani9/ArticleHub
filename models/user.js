@@ -16,7 +16,9 @@ let userSchema=mongoose.Schema({
     password:{
       type:String,
       required:true
-    }
+    },
+    resetPasswordToken: String,
+    resetPasswordExpires: Date
 });
 
 var User=mongoose.model('User',userSchema);

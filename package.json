@@ -4,15 +4,16 @@
   "description": "Simple knowledgebase app",
   "main": "app.js",
   "scripts": {
-    "start":"node app.js",
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "engines":{
-    "node":"8.6.0"
+  "engines": {
+    "node": "8.6.0"
   },
   "author": "Debanshu Lalwani",
   "license": "ISC",
   "dependencies": {
+    "async": "^2.5.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.2",
     "connect-flash": "^0.1.1",
@@ -21,6 +22,7 @@
     "express-session": "^1.15.6",
     "express-validator": "^4.2.1",
     "mongoose": "^4.12.2",
+    "nodemailer": "^4.2.0",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "pug": "^2.0.0-rc.4"
