@@ -89,7 +89,8 @@ router.post('/add',(req,res)=>{
     });
   }
   else{
-      var time=new Date().toString();
+      var time=new Date().toLocaleString();
+      console.log(time);
       var article=new Article({
       title:req.body.title,
       author:req.user._id,
