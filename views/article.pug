@@ -1,9 +1,13 @@
 extends layout
 
 block content
+  script(src='//cdn.tinymce.com/4/tinymce.min.js')
+  script.
+    tinymce.init({ selector:'textarea',readonly:true,menubar:false,branding:false,toolbar:false,
+                        plugins: "autoresize",resize:false,autoresize_bottom_margin: 20});
   h1 #{article.title}
   h5 Written By #{author}
-  p #{article.body}
+  textarea #{article.body}
   hr
   if user
     if user.id==article.author || user.id=="59e4d03d2a00111b28423e46" || user.id=="59e5cc19f38fe700125d9e4e"
