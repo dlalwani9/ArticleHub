@@ -89,10 +89,12 @@ router.post('/add',(req,res)=>{
     });
   }
   else{
+      var time=new Date().toString();
       var article=new Article({
       title:req.body.title,
       author:req.user._id,
-      body:req.body.body
+      body:req.body.body,
+      written:time
     });
 
     article.save().then(()=>{

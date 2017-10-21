@@ -6,7 +6,7 @@ block content
     tinymce.init({ selector:'textarea',readonly:true,menubar:false,branding:false,toolbar:false,
                         plugins: "autoresize",resize:false,autoresize_bottom_margin: 20});
   h1 #{article.title}
-  h5 Written By #{author}
+  h5 Written By #{author} on #{article.written}
   textarea #{article.body}
   hr
   if user

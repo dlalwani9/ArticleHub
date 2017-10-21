@@ -12,7 +12,8 @@ let articleSchema=mongoose.Schema({
     body:{
       type:String,
       required:true
-    }
+    },
+    written:String
 });
 
 var Article=mongoose.model('Article',articleSchema);
