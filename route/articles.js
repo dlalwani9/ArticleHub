@@ -2,6 +2,10 @@ const express=require('express');
 const router=express.Router();
 const {Article}=require('../models/article');
 const {User}=require('../models/user');
+var mongoose = require('mongoose');
+var paginate = require('paginate')({
+	mongoose: mongoose
+});
 
 router.get('/add',ensureAuthenticated,(req,res)=>{
   res.render('add',{
@@ -9,29 +13,31 @@ router.get('/add',ensureAuthenticated,(req,res)=>{
   });
 });
 
-router.get('/gallery',(req,res)=>{
-  Article.find({}).then((articles)=>{
-    res.render('index',{
-      title:"Articles",
-      articles:articles
-    })
-  }).catch((e)=>console.log(e));
-});
+router.get('/gallery', function(req, res, next) {
+    Article.find().paginate({ page: req.query.page }, function(err, articles) {
+        res.render('index', {
+            articles: articles,
+            title:"Articles"
+        });
+    });
+  });
+
+
 
 router.get('/personal',(req,res)=>{
   if(req.user){
-  Article.find({author:req.user._id}).then((articles)=>{
+  Article.find({author:req.user._id}).paginate({ page: req.query.page }, function(err, articles) {
     if(articles.length>0){
-    res.render('index',{
-      title:"Your Articles",
-      articles:articles
-    })
-  }
-  else{
+      res.render('index', {
+          articles: articles,
+          title:"Your Content"
+      });
+    }
+    else{
     req.flash('danger','Please write an article to view the page');
     res.redirect('/articles/add');
-  }
-  }).catch((e)=>console.log(e));
+    }
+  });
 }
 else{
   req.flash('danger','Please Log in to write articles');

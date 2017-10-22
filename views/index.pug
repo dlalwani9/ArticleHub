@@ -6,3 +6,4 @@ block content
     each article, i in articles
       li.list-group-item
         a(href="/articles/"+article._id)=article.title
+  != articles.pagination.render({ baseUrl: '/articles/gallery'})
