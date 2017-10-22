@@ -1,6 +1,7 @@
 const express=require('express');
 const router=express.Router();
 const {User}=require('../models/user');
+const {Confirm}=require('../models/confirm');
 const bcrypt=require('bcryptjs');
 const passport=require('passport');
 const async=require('async');
@@ -52,7 +53,7 @@ router.post('/register',(req,res)=>{
           res.render('register');
           }
           else{
-            let newUser=new User({
+            let newUser=new Confirm({
                   name:name,
                   email:email,
                   username:username,
@@ -88,14 +89,24 @@ router.post('/register',(req,res)=>{
                               'http://' + req.headers.host + '/users/verify/' + token+'\n\n'+
                               'This link is valid for 24 hours.'
                           };
-                          smtpTransport.sendMail(mailOptions).then(()=>{
-                            console.log('mail sent');
-                            newUser.save().then(()=>{
-                              req.flash('success','An email has been sent to '+email+' with further instrunctions to verify your account');
-                              res.redirect('/');
 
-                            }).catch((e)=>console.log(e));
-                          },(err)=>console.log(err));
+                            newUser.save().then(()=>{
+                              smtpTransport.sendMail(mailOptions).then(()=>{
+                                console.log('mail sent');
+                                req.flash('success','An email has been sent to '+email+
+                                ' with further instructions to verify your account.');
+                                res.redirect('/');
+
+                              },(err)=>{
+                                req.flash('danger','Some error occured while processing your request.');
+                                res.redirect('/');
+                              });
+
+                            }).catch((e)=>{
+                              req.flash('danger','An Email to email id: '+email+' was already sent for verification.');
+                              res.redirect('/');
+                            });
+
 
 
                       }).catch((e)=>console.log(e));
@@ -122,6 +133,20 @@ router.get('/login',(req,res)=>{
   else{
   res.render('login');
   }
+});
+
+router.get('/clear',(req,res)=>{
+  if(req.user && req.user.isAdmin){
+  Confirm.remove({verifyTokenExpires: { $gt: Date.now() } }).then(()=>{
+    req.flash('success','Success');
+    res.redirect('/');
+  }).catch((e)=>console.log(e));
+}
+else {
+  req.flash('danger','Not Authorized');
+  res.redirect('/');
+}
+
 });
 
 router.get('/logout',(req,res)=>{
@@ -212,7 +237,7 @@ router.get('/reset/:token', function(req, res) {
 });
 
 router.get('/verify/:token', function(req, res) {
-  User.findOne({ verifyToken: req.params.token, verifyTokenExpires: { $gt: Date.now() } }, function(err, user) {
+  Confirm.findOne({ verifyToken: req.params.token, verifyTokenExpires: { $gt: Date.now() } }, function(err, user) {
     if(err){
       req.flash('error', 'Some Error Occured, Inconvenience is regretted.');
       return res.redirect('/');
@@ -222,18 +247,29 @@ router.get('/verify/:token', function(req, res) {
       req.flash('error', 'Account verification token is invalid or has expired.');
       return res.redirect('/users/register');
     }
-    let query={verifyTokenExpires:user.verifyTokenExpires};
-    var updateUser=user;
-    updateUser.verifyToken=" ",
-    updateUser.verified=true;
-    console.log(updateUser);
-    User.update(query,updateUser).then(()=>{
+    var newUser=new User({
+      name:user.name,
+      email:user.email,
+      username:user.username,
+      password:user.password,
+      verified:true
+    })
+    let query={verifyToken: req.params.token};
+
+    Confirm.findOneAndRemove(query).then(()=>{
+    newUser.save().then(()=>{
       req.flash('success', 'Your account has been verified. Now you can log in');
       res.redirect('/users/login');
     }).catch((e)=>{
       req.flash('error', 'Some Error Occured, Inconvenience is regretted.');
       res.redirect('/');
     });
+
+    }).catch((e)=>{
+      req.flash('error', 'Some Error Occured, Inconvenience is regretted.');
+      res.redirect('/');
+    });
+
   });
 });
 

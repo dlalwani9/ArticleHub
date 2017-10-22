@@ -133,7 +133,7 @@ router.delete('/:id',(req,res)=>{
   let query={_id:req.params.id};
 
   Article.findById(req.params.id,function(err,article){
-    if(req.user._id=="59e4d03d2a00111b28423e46" || req.user._id=="59e5cc19f38fe700125d9e4e"){
+    if(req.user.isAdmin){
       Article.remove(query).then(()=>{
         res.send('Success');
       }).catch((e)=>console.log(e));

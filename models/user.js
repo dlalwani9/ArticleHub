@@ -23,7 +23,11 @@ let userSchema=mongoose.Schema({
     resetPasswordExpires: Date,
     verifyToken: String,
     verifyTokenExpires:Date,
-    verified:Boolean
+    verified:Boolean,
+    isAdmin:{
+      type:Boolean,
+      default:false
+    }
 });
 
 var User=mongoose.model('User',userSchema);

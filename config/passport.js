@@ -10,11 +10,9 @@ module.exports=function(passport){
         return done(null,false,{message:'No User Found'});
       }
 
+      
       bcrypt.compare(password,user.password).then((isMatch)=>{
         if(isMatch){
-          if(!user.verified){
-            return done(null,false,{message:'Please verify your account by following the instrunctions sent to your mail id '+user.email});
-          }
           return done(null,user);
         }
         else{

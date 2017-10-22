@@ -10,12 +10,12 @@ block content
   textarea #{article.body}
   hr
   if user
-    if user.id==article.author || user.id=="59e4d03d2a00111b28423e46" || user.id=="59e5cc19f38fe700125d9e4e"
+    if user.id==article.author || user.isAdmin
       a.btn.btn-default(href='/articles/edit/'+article._id) Edit
       a.btn.btn-danger.delete-article(href='#',data-id=article._id,style="margin-left:20px;") Delete
       br
       br
-  .fb-like(data-href="https://articlehub.herokuapp.com/", data-layout="standard", data-action="like", data-size="small", data-show-faces="true", data-share="true")
+  .fb-like(data-href="https://articlehub.herokuapp.com/articles/"+article._id, data-layout="standard", data-action="like", data-size="small", data-show-faces="true", data-share="true")
   br
-  .fb-comments(data-href="https://articlehub.herokuapp.com/", data-numposts="5")
+  .fb-comments(data-href="https://articlehub.herokuapp.com/articles"+article._id, data-numposts="5")
   
