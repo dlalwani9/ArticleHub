@@ -7,18 +7,23 @@ let userSchema=mongoose.Schema({
     },
     email:{
       type:String,
-      required:true
+      required:true,
+      unique:true
     },
     username:{
       type:String,
-      required:true
+      required:true,
+      unique:true
     },
     password:{
       type:String,
       required:true
     },
     resetPasswordToken: String,
-    resetPasswordExpires: Date
+    resetPasswordExpires: Date,
+    verifyToken: String,
+    verifyTokenExpires:Date,
+    verified:Boolean
 });
 
 var User=mongoose.model('User',userSchema);

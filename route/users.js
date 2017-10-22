@@ -39,42 +39,76 @@ router.post('/register',(req,res)=>{
     });
   }
   else{
-      User.findOne({email:req.body.email}).then((user)=>{
-        if(user){
-        //  console.log(user);
-        req.flash('danger','Email already exists');
-        res.render('register');
-        }
-        else{
-          User.findOne({username:req.body.username}).then((user)=>{
-            if(user){
-            req.flash('danger','Username already exists');
-            res.render('register');
-            }
-            else{
-              let newUser=new User({
-                    name:name,
-                    email:email,
-                    username:username,
-                    password:password,
-                    resetPasswordToken:undefined,
-                    resetPasswordExpires:undefined
-                  });
+    User.findOne({email:req.body.email}).then((user)=>{
+      if(user){
+      //  console.log(user);
+      req.flash('danger','Email already exists');
+      res.render('register');
+      }
+      else{
+        User.findOne({username:req.body.username}).then((user)=>{
+          if(user){
+          req.flash('danger','Username already exists');
+          res.render('register');
+          }
+          else{
+            let newUser=new User({
+                  name:name,
+                  email:email,
+                  username:username,
+                  password:password,
+                  verified:false
+                });
 
-                  bcrypt.genSalt(10).then((salt)=>{
-                    bcrypt.hash(newUser.password,salt).then((hash)=>{
-                      newUser.password=hash;
-                      newUser.save().then(()=>{
-                        req.flash('success','You are registered now and can log in');
-                        res.redirect('/users/login')
+                crypto.randomBytes(20,function(err,buf){
+                  if(err){
+                    console.log(err);
+                  }
+                  else{
+                    var token = buf.toString('hex');
+                    bcrypt.genSalt(10).then((salt)=>{
+                      bcrypt.hash(newUser.password,salt).then((hash)=>{
+                        newUser.password=hash;
+                        newUser.verifyToken=token;
+                        newUser.verifyTokenExpires = Date.now() + 86400000;
+
+                          var smtpTransport = nodemailer.createTransport({
+                            service: 'Gmail',
+                            auth: {
+                              user: 'articlehubreset@gmail.com',
+                              pass: process.env.GMAILPW
+                            }
+                          });
+                          var mailOptions = {
+                            to: email,
+                            from: 'articlehubreset@gmail.com',
+                            subject: 'Account verification for your account on articlehub.herokuapp.com',
+                            text:'Hi '+name+',\n\n'+
+                              'Please click on the following link, or paste this into your browser to complete the Registeration process:\n\n' +
+                              'http://' + req.headers.host + '/users/verify/' + token+'\n\n'+
+                              'This link is valid for 24 hours.'
+                          };
+                          smtpTransport.sendMail(mailOptions).then(()=>{
+                            console.log('mail sent');
+                            newUser.save().then(()=>{
+                              req.flash('success','An email has been sent to '+email+' with further instrunctions to verify your account');
+                              res.redirect('/');
+
+                            }).catch((e)=>console.log(e));
+                          },(err)=>console.log(err));
+
+
                       }).catch((e)=>console.log(e));
                     }).catch((e)=>console.log(e));
-                  }).catch((e)=>console.log(e));
-            }
-          }).catch((e)=>console.log(e));
-        }
-      }).catch((e)=>console.log(e));
 
+
+                  }
+                });
+
+          }
+        }).catch((e)=>console.log(e));
+      }
+    }).catch((e)=>console.log(e));
   }
 
 
@@ -174,6 +208,32 @@ router.get('/reset/:token', function(req, res) {
       return res.redirect('/users/forgot');
     }
     res.render('reset', {token: req.params.token});
+  });
+});
+
+router.get('/verify/:token', function(req, res) {
+  User.findOne({ verifyToken: req.params.token, verifyTokenExpires: { $gt: Date.now() } }, function(err, user) {
+    if(err){
+      req.flash('error', 'Some Error Occured, Inconvenience is regretted.');
+      return res.redirect('/');
+    }
+
+    if (!user) {
+      req.flash('error', 'Account verification token is invalid or has expired.');
+      return res.redirect('/users/register');
+    }
+    let query={verifyTokenExpires:user.verifyTokenExpires};
+    var updateUser=user;
+    updateUser.verifyToken=" ",
+    updateUser.verified=true;
+    console.log(updateUser);
+    User.update(query,updateUser).then(()=>{
+      req.flash('success', 'Your account has been verified. Now you can log in');
+      res.redirect('/users/login');
+    }).catch((e)=>{
+      req.flash('error', 'Some Error Occured, Inconvenience is regretted.');
+      res.redirect('/');
+    });
   });
 });
 
