@@ -9,7 +9,7 @@ var paginate = require('paginate')({
 
 router.get('/add',ensureAuthenticated,(req,res)=>{
   res.render('add',{
-    title:"Add Article"
+    title:"Add Post"
   });
 });
 
@@ -17,7 +17,7 @@ router.get('/gallery', function(req, res, next) {
     Article.find().paginate({ page: req.query.page }, function(err, articles) {
         res.render('index', {
             articles: articles,
-            title:"Articles"
+            title:"Posts"
         });
     });
   });
@@ -80,7 +80,7 @@ router.get('/edit/:id',ensureAuthenticated,(req,res)=>{
     }
     else {
     res.render('edit',{
-      title:'Edit Article',
+      title:'Edit Post',
       article:article
     });
   }
@@ -89,13 +89,13 @@ router.get('/edit/:id',ensureAuthenticated,(req,res)=>{
 
 router.post('/add',(req,res)=>{
   req.checkBody('title','Title is required').notEmpty();
-  //req.checkBody('author','Author is required').notEmpty();
+  req.checkBody('category','Category is required').notEmpty();
   req.checkBody('body','Body is required').notEmpty();
 
   let err=req.validationErrors();
   if(err){
     res.render('add',{
-      title:'Add Article',
+      title:'Add Post',
       errors:err
     });
   }
@@ -107,11 +107,12 @@ router.post('/add',(req,res)=>{
       author:req.user._id,
       body:req.body.body,
       written:time,
-			authorName:req.user.name
+			authorName:req.user.name,
+			category:req.body.category
     });
 
     article.save().then(()=>{
-      req.flash('success','Article Added');
+      req.flash('success','Post Added');
       res.redirect('/');
     }).catch((e)=>console.log(e));
   }
@@ -121,14 +122,30 @@ router.post('/edit/:id',(req,res)=>{
   var article={
     title:req.body.title,
     author:req.user._id,
-    body:req.body.body
+    body:req.body.body,
+		category:req.body.category,
+		_id:req.params.id
   };
 
+	req.checkBody('title','Title is required').notEmpty();
+  req.checkBody('category','Category is required').notEmpty();
+  req.checkBody('body','Body is required').notEmpty();
+
+  let err=req.validationErrors();
+  if(err){
+		res.render('edit',{
+			title:'Edit Post',
+			article:article,
+			errors:err
+		});
+  }
+	else{
   let query={_id:req.params.id};
   Article.update(query,article).then(()=>{
-    req.flash('success','Article Updated');
+    req.flash('success','Post Updated');
     res.redirect('/');
   }).catch((e)=>console.log(e));
+}
 });
 
 router.get('/delete/:id',(req,res)=>{
@@ -141,7 +158,7 @@ router.get('/delete/:id',(req,res)=>{
   Article.findById(req.params.id,function(err,article){
     if(req.user.isAdmin){
       Article.remove(query).then(()=>{
-        req.flash('Success','Artilce deleted');
+        req.flash('Success','Post deleted');
 				res.redirect('/articles/gallery');
       }).catch((e)=>console.log(e));
     }
@@ -151,7 +168,7 @@ router.get('/delete/:id',(req,res)=>{
       }
       else{
         Article.remove(query).then(()=>{
-					req.flash('Success','Artilce deleted');
+					req.flash('Success','Post deleted');
 					res.redirect('/articles/gallery');
         }).catch((e)=>console.log(e));
       }

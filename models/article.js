@@ -18,7 +18,11 @@ let articleSchema=mongoose.Schema({
       type:Number,
       default:1
     },
-    authorName:String
+    authorName:String,
+    category:{
+      type:String,
+      required:true
+    }
 });
 
 var Article=mongoose.model('Article',articleSchema);

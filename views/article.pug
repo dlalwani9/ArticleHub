@@ -10,6 +10,8 @@ block content
     strong #{author} 
     on #{article.written}  
     p.btn.btn-warning(style="margin-left:80px;") Views: #{views}
+    br
+    p.btn.btn-info Category: #{article.category}
   textarea #{article.body}
   hr
   if user
