@@ -1,9 +1,26 @@
 extends layout
-
 block content
   h1 #{title}
-  ul.list-group
+  br
+  ul.list-group.mr-auto
     each article, i in articles
-      li.list-group-item
-        a(href="/articles/"+article._id)=article.title
-  != articles.pagination.render({ baseUrl: '/articles/gallery'})
+      .row
+        .col-sm-8
+          .thumbnail
+            .caption
+              button.btn.btn-warning(style='float: right;', type='button')
+                | Views:
+                span.badge #{article.views} 
+              h3
+                a(href='/articles/'+article._id)=article.title
+              p(style='color: #555555')
+                span.glyphicon.glyphicon-pencil(aria-hidden='true')='Written by '+article.authorName
+              hr
+  br
+  br
+  br
+  .thumbnail
+    .caption
+      h4 Page:
+        span.badge
+          != articles.pagination.render({ baseUrl: '/articles/gallery'})

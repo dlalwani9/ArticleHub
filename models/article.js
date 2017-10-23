@@ -13,7 +13,12 @@ let articleSchema=mongoose.Schema({
       type:String,
       required:true
     },
-    written:String
+    written:String,
+    views:{
+      type:Number,
+      default:1
+    },
+    authorName:String
 });
 
 var Article=mongoose.model('Article',articleSchema);

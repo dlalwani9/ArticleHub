@@ -6,13 +6,16 @@ block content
     tinymce.init({ selector:'textarea',readonly:true,menubar:false,branding:false,toolbar:false,
                         plugins: "autoresize",resize:false,autoresize_bottom_margin: 20});
   h1 #{article.title}
-  h5 Written By #{author} on #{article.written}
+  h5 Written By 
+    strong #{author} 
+    on #{article.written}  
+    p.btn.btn-warning(style="margin-left:80px;") Views: #{views}
   textarea #{article.body}
   hr
   if user
     if user.id==article.author || user.isAdmin
-      a.btn.btn-default(href='/articles/edit/'+article._id) Edit
-      a.btn.btn-danger.delete-article(href='#',data-id=article._id,style="margin-left:20px;") Delete
+      a.btn.btn-primary(href='/articles/edit/'+article._id) Edit
+      a.btn.btn-danger(href='/articles/delete/'+article._id,style="margin-left:20px;") Delete
       br
       br
   .fb-like(data-href="https://articlehub.herokuapp.com/articles/"+article._id, data-layout="standard", data-action="like", data-size="small", data-show-faces="true", data-share="true")

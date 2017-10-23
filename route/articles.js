@@ -48,10 +48,15 @@ else{
 
 router.get('/:id',(req,res)=>{
   Article.findById(req.params.id).then((article)=>{
+		Article.findOneAndUpdate({_id:req.params.id},{$inc:{views:1}}).then(()=>{
+		}).catch((e)=>console.log(e));
     User.findById(article.author).then((user)=>{
+			var views=article.views;
+			views++;
       res.render('article',{
         article:article,
-        author:user.name
+        author:user.name,
+				views:views
       });
     }).catch((e)=>console.log(e));
   }).catch((e)=>console.log(e));
@@ -101,7 +106,8 @@ router.post('/add',(req,res)=>{
       title:req.body.title,
       author:req.user._id,
       body:req.body.body,
-      written:time
+      written:time,
+			authorName:req.user.name
     });
 
     article.save().then(()=>{
@@ -125,7 +131,7 @@ router.post('/edit/:id',(req,res)=>{
   }).catch((e)=>console.log(e));
 });
 
-router.delete('/:id',(req,res)=>{
+router.get('/delete/:id',(req,res)=>{
   if(!req.user._id){
     res.status(500).send();
   }
@@ -135,7 +141,8 @@ router.delete('/:id',(req,res)=>{
   Article.findById(req.params.id,function(err,article){
     if(req.user.isAdmin){
       Article.remove(query).then(()=>{
-        res.send('Success');
+        req.flash('Success','Artilce deleted');
+				res.redirect('/articles/gallery');
       }).catch((e)=>console.log(e));
     }
     else{
@@ -144,7 +151,8 @@ router.delete('/:id',(req,res)=>{
       }
       else{
         Article.remove(query).then(()=>{
-          res.send('Success');
+					req.flash('Success','Artilce deleted');
+					res.redirect('/articles/gallery');
         }).catch((e)=>console.log(e));
       }
     }

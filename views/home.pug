@@ -20,7 +20,7 @@ html(lang='en')
               nav.nav.nav-masthead
                 a.nav-link.active(href='/') Home
                 if !user
-                  a.nav-link(href='/articles/gallery') Article Gallery
+                  a.nav-link(href='/articles/gallery') Gallery
                 if user
                   a.nav-link(href='/users/logout') Logout
           .container
@@ -29,7 +29,7 @@ html(lang='en')
             if !user
               h1.cover-heading Welcome
               p.lead
-                | ArticleHub is the Perfect destination for writing and reading articles. Click on register to start writing articles and unleash the writer within you. 
+                | ArticleHub is the Perfect destination for writing and reading Articles .Click on register to start writing and unleash the writer within you. 
               p.lead
                 a.btn.btn-lg.btn-secondary(href='/users/register') Register
               p.lead
@@ -38,16 +38,16 @@ html(lang='en')
                 a.btn.btn-lg.btn-secondary(href='/users/login') Login
             else
               p.lead
-                | Click on Add article to contibute articles 
+                | Click on Add article to contribute articles 
               p.lead
                 a.btn.btn-lg.btn-secondary(href='/articles/add') Add Article
               p.lead
                 | Click below to view all articles on the site
               p.lead
-                a.btn.btn-lg.btn-secondary(href='/articles/gallery') Article Gallery
+                a.btn.btn-lg.btn-secondary(href='/articles/gallery') Gallery
               p.lead
                 | Click below to view and update your personal articles
               p.lead
-                a.btn.btn-lg.btn-secondary(href='/articles/personal') Personal Articles
+                a.btn.btn-lg.btn-secondary(href='/articles/personal') Personal Posts
         
               
