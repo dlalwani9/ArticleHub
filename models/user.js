@@ -5,12 +5,10 @@ let userSchema=mongoose.Schema({
       type:String
     },
     email:{
-      type:String,
-      unique:true
+      type:String
     },
     username:{
-      type:String,
-      unique:true
+      type:String
     },
     password:{
       type:String
