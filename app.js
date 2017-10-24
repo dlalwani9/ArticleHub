@@ -57,7 +57,6 @@ passport.use(new FacebookStrategy({
 	  },
 	  function(accessToken, refreshToken, profile, done) {
       if(!profile.emails){
-        req.flash('danger','Login Failed as Email was not provided');
         return done(null,false);
       }
       User.findOne({ facebookId: profile.id }).then((user)=>{
@@ -124,7 +123,7 @@ app.get('/',(req,res)=>{
   res.render('home');
 });
 
-app.get('/auth/facebook', passport.authenticate('facebook', {scope: ['email']}));
+app.get('/auth/facebook', passport.authenticate('facebook', { authType: 'rerequest',scope: ['email']}));
 
 app.get('/auth/facebook/callback',
 	  passport.authenticate('facebook', { successRedirect: '/',
