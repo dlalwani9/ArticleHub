@@ -67,7 +67,11 @@ passport.use(new FacebookStrategy({
             User.findOneAndUpdate({ email:profile.emails[0].value },
               {$set:{facebookId:profile.id}}).then(()=>{
                 console.log('facebook profileid updated in local account');
-              }).catch((e)=>console.log(e));
+              }).catch((e)=>{
+                console.log(e);
+                req.flash('error', 'Some Error Occured, Inconvenience is regretted.');
+                return res.redirect('/');
+              });
               return done(null,user);
               }
             if(!user){
@@ -80,13 +84,21 @@ passport.use(new FacebookStrategy({
                   });
               newUser.save().then(()=>{
                 return done(null,newUser);
-              }).catch((e)=>{throw e});
+              }).catch((e)=>{
+                console.log(e);
+                req.flash('error', 'Some Error Occured, Inconvenience is regretted.');
+                return res.redirect('/');
+              });
 
             }
           })
 
         }
-      }).catch((e)=>console.log(e));
+      }).catch((e)=>{
+        console.log(e);
+        req.flash('error', 'Some Error Occured, Inconvenience is regretted.');
+        return res.redirect('/');
+      });
 	    }
 	));
 
