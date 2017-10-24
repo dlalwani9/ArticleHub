@@ -2,22 +2,18 @@ const mongoose=require('mongoose');
 
 let userSchema=mongoose.Schema({
     name:{
-      type:String,
-      required:true
+      type:String
     },
     email:{
       type:String,
-      required:true,
       unique:true
     },
     username:{
       type:String,
-      required:true,
       unique:true
     },
     password:{
-      type:String,
-      required:true
+      type:String
     },
     resetPasswordToken: String,
     resetPasswordExpires: Date,
@@ -27,7 +23,8 @@ let userSchema=mongoose.Schema({
     isAdmin:{
       type:Boolean,
       default:false
-    }
+    },
+    facebookId:String
 });
 
 var User=mongoose.model('User',userSchema);

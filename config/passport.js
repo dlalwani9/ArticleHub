@@ -1,6 +1,9 @@
 const LocalStrategy=require('passport-local').Strategy;
 const {User}=require('../models/user');
 const bcrypt=require('bcryptjs');
+const passport=require('passport');
+
+
 
 module.exports=function(passport){
   passport.use(new LocalStrategy(function(username,password,done){
@@ -10,7 +13,7 @@ module.exports=function(passport){
         return done(null,false,{message:'No User Found'});
       }
 
-      
+
       bcrypt.compare(password,user.password).then((isMatch)=>{
         if(isMatch){
           return done(null,user);

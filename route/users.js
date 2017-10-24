@@ -40,19 +40,43 @@ router.post('/register',(req,res)=>{
     });
   }
   else{
-    User.findOne({email:req.body.email}).then((user)=>{
-      if(user){
-      //  console.log(user);
-      req.flash('danger','Email already exists');
-      res.render('register');
-      }
-      else{
         User.findOne({username:req.body.username}).then((user)=>{
           if(user){
           req.flash('danger','Username already exists');
           res.render('register');
           }
           else{
+            User.findOne({email:req.body.email}).then((user)=>{
+
+              if(user && user.facebookId && user.facebookId.length>0){
+
+                bcrypt.genSalt(10, function(err, salt){
+                  bcrypt.hash(password, salt, function(err, hash){
+                    if(err){
+                      console.log(err);
+                      return;
+                    }
+                    User.findOneAndUpdate({email:req.body.email},
+                      {$set:{name:name,username:username,password:hash}},function(err){
+                      if(err){
+                        console.log(err);
+                        return;
+                      } else {
+                        req.flash('success','You are now registered and can log in');
+                        res.redirect('/users/login');
+                      }
+                    });
+                  });
+                });
+
+
+
+              }
+            else if(user){
+              req.flash('danger','Email already exists');
+              res.render('register');
+            }
+            else{
             let newUser=new Confirm({
                   name:name,
                   email:email,
@@ -187,7 +211,12 @@ router.post('/forgot', function(req, res, next) {
           req.flash('danger', 'No account with that email address exists.');
           return res.redirect('/users/forgot');
         }
-
+        if(user.facebookId.length>0 && !user.username){
+          req.flash('danger', 'You have not created an ArticleHub account. '+
+          'You Logged in through Facebook Earlier. Please log in through Facebook to continue'+
+          ' or Please Register in order to create an ArticleHub account.');
+          return res.redirect('/users/register');
+        }
         user.resetPasswordToken = token;
         user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
 
