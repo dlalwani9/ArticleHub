@@ -8,7 +8,6 @@ var expressValidator=require('express-validator');
 var flash=require('connect-flash');
 const passport=require('passport');
 var session=require('express-session');
-var configAuth = require('./config/auth');
 var FacebookStrategy = require('passport-facebook').Strategy;
 
 var app=express();
