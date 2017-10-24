@@ -57,7 +57,7 @@ passport.use(new FacebookStrategy({
 	  },
 	  function(accessToken, refreshToken, profile, done) {
       if(!profile.emails){
-        return done(null,false,{message:'Login Failed beacuse Email was not provided.'});
+        return done(null,false,{message:'Login Failed because Email was not provided.'});
       }
       User.findOne({ facebookId: profile.id }).then((user)=>{
         if(user){
