@@ -52,7 +52,7 @@ require('./config/passport')(passport);
 passport.use(new FacebookStrategy({
 	    clientID: process.env.CLIENTID,
 	    clientSecret: process.env.CLIENTSECRET,
-	    callbackURL: 'http://localhost:3000/auth/facebook/callback',
+	    callbackURL: 'https://articlehub.herokuapp.com/auth/facebook/callback',
       profileFields: ['id', 'emails', 'name']
 	  },
 	  function(accessToken, refreshToken, profile, done) {
