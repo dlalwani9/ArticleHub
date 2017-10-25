@@ -6,7 +6,8 @@ var mongoose = require('mongoose');
 var paginate = require('paginate')({
 	mongoose: mongoose
 });
-
+var query=null,currentPage=1;
+var pageSize=5,start=0,totalRec;
 
 router.get('/add',ensureAuthenticated,(req,res)=>{
   res.render('add',{
@@ -28,21 +29,53 @@ router.get('/gallery', function(req, res, next) {
 			req.flash('danger','Invalid search');
 			return res.redirect('/articles/gallery');
 		}
+		query=req.body.search;
+		Article.dataTables({
+		 search: {
+			 value: query,
+			 fields: ['body','authorName','title','category']
+		 },
+		 sort: {
+			 authorName: 1
+		 }
+	 }).then((table)=>{
+		 totalRec=table.total;
+		 res.redirect('/articles/search');
+	 }).catch((e)=>{
+		 req.flash('danger','Some error occured while processing your request.');
+		 res.redirect('/articles/gallery');
+	 }); // table.total, table.data
+	});
+
+	router.get('/search', (req, res)=> {
+		var pageCount=Math.ceil(totalRec /  pageSize);
+		if (typeof req.query.page !== 'undefined') {
+					currentPage = req.query.page;
+		}
+	 if(currentPage >1){
+		 start = (currentPage - 1) * pageSize;
+		}
+		else{
+			start=0;
+		 }
 	  Article.dataTables({
-			limit: 30,
+			limit: pageSize,
+			skip:start,
 	    search: {
-	      value: req.body.search,
+	      value: query,
 	      fields: ['body','authorName','title','category']
 	    },
 	    sort: {
 	      authorName: 1
 	    }
 	  }).then((table)=>{
-				res.render('search',{
-					articles:table.data,
-					title:'Search Results'
-				});
-			}); // table.total, table.data
+				res.render('search', {title:"Search Results",articles:table.data, pageSize: pageSize,
+					pageCount: pageCount,currentPage: currentPage});
+
+		}).catch((e)=>{
+			req.flash('danger','Some error occured while processing your request.');
+			res.redirect('/articles/gallery');
+		}); // table.total, table.data
 	});
 
 
@@ -124,7 +157,7 @@ router.post('/add',(req,res)=>{
   }
   else{
       var time=new Date().toString();
-      console.log(time);
+      //console.log(time);
       var article=new Article({
       title:req.body.title,
       author:req.user._id,

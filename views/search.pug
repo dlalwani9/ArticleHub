@@ -2,6 +2,13 @@ extends layout
 block content
   if !articles.length
     h1 No Results Found
+    br
+    br
+    br
+    br
+    br
+    br
+    br
   if articles
     if articles.length
       h1 #{title}
@@ -25,10 +32,32 @@ block content
                     h6 Category: 
                       strong #{article.category}
                 hr
-  br
-  br
-  br
-  br
-  br
-  br
-  br
+  h3 
+    if pageCount > 1
+         p Page:
+         ul.pagination
+          if currentPage > 1
+           li
+            a(href='/articles/search/?page=1')  &laquo;
+          - var x = 1
+          if currentPage > 5
+           - x = x + (currentPage - 4)
+          if (x !== 1)
+             li.disabled
+                a(href='#') ...
+          - for (x; x <= pageCount; x++)
+             if( currentPage == x)
+              li.active
+                 span.sr_only
+                     = currentPage
+             else
+               li
+                 a(href= "/articles/search/?page="+x )
+                  = x
+             if x == (currentPage + 4)
+                 li.disabled
+                  a(href="#") ...
+                  - break
+          if currentPage != pageCount
+          li
+              a(href= "/articles/search/?page=#{Math.floor(pageCount)}" ) &raquo;
