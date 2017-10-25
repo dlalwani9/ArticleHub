@@ -1,4 +1,5 @@
 const mongoose=require('mongoose');
+var dataTables = require('mongoose-datatables');
 
 let articleSchema=mongoose.Schema({
     title:{
@@ -24,6 +25,8 @@ let articleSchema=mongoose.Schema({
       required:true
     }
 });
+
+articleSchema.plugin(dataTables);
 
 var Article=mongoose.model('Article',articleSchema);
 module.exports={Article};

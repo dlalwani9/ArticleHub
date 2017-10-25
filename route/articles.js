@@ -7,6 +7,7 @@ var paginate = require('paginate')({
 	mongoose: mongoose
 });
 
+
 router.get('/add',ensureAuthenticated,(req,res)=>{
   res.render('add',{
     title:"Add Post"
@@ -21,6 +22,28 @@ router.get('/gallery', function(req, res, next) {
         });
     });
   });
+
+	router.post('/search', (req, res)=> {
+		if(req.body.search.length==0){
+			req.flash('danger','Invalid search');
+			return res.redirect('/articles/gallery');
+		}
+	  Article.dataTables({
+			limit: 30,
+	    search: {
+	      value: req.body.search,
+	      fields: ['body','authorName','title','category']
+	    },
+	    sort: {
+	      authorName: 1
+	    }
+	  }).then((table)=>{
+				res.render('search',{
+					articles:table.data,
+					title:'Search Results'
+				});
+			}); // table.total, table.data
+	});
 
 
 
