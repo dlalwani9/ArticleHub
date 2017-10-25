@@ -1,0 +1,34 @@
+extends layout
+block content
+  if !articles.length
+    h1 No Results Found
+  if articles
+    if articles.length
+      h1 #{title}
+    br
+    ul.list-group.mr-auto
+      each article, i in articles
+        .row
+          .col-sm-8
+            .thumbnail
+              .caption
+                button.btn.btn-warning(style='float: right;', type='button')
+                  | Views:
+                  span.badge #{article.views} 
+                h3
+                  a(href='/articles/'+article._id)=article.title
+                p(style='color: #555555')
+                  p.span.glyphicon.glyphicon-pencil(aria-hidden='true')
+                    h6 Written by: 
+                      strong #{article.authorName}
+                  p.span.glyphicon.glyphicon-pencil(aria-hidden='true')
+                    h6 Category: 
+                      strong #{article.category}
+                hr
+  br
+  br
+  br
+  br
+  br
+  br
+  br
