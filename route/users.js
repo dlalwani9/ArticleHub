@@ -40,6 +40,11 @@ router.post('/register',(req,res)=>{
     });
   }
   else{
+        if(req.body.password.length<6){
+          req.flash('danger','Password must be of at least 6 characters')
+          res.redirect('/users/register');
+          return;
+        }
         User.findOne({username:req.body.username}).then((user)=>{
           if(user){
           req.flash('danger','Username already exists');
