@@ -1,7 +1,7 @@
 # AricleHub
 
-A Web application which allows users to express their views by writing articles and also lets them view articles written by other users.
-A user needs to be registered in order to contribute articles. Have a look-[ArticleHub](https://articlehub.herokuapp.com/) 
+ArticleHub is a web application for reading, posting and sharing Articles/Poems/Experiences/Stories/Code and pretty much everything. 
+A user needs to be registered or needs to Login through facebook in order to contribute Posts. Sharing of posts can be achieved through facebook share plugin. Likes and Comments on posts is achieved by Facebook Like and Comments Plugin. Have a look-[ArticleHub](https://articlehub.herokuapp.com/).
 
 ### Installattion
 
