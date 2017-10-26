@@ -6,12 +6,13 @@ block content
     tinymce.init({ selector:'textarea',readonly:true,menubar:false,branding:false,toolbar:false,
                         plugins: "autoresize",resize:false,autoresize_bottom_margin: 20});
   h1 #{article.title}
-  h5 Written By 
+  h5 Posted By 
     strong #{author} 
     on #{article.written}  
-    p.btn.btn-warning(style="margin-left:80px;") Views: #{views}
+    br
     br
     p.btn.btn-info Category: #{article.category}
+    p.btn.btn-warning(style='float: right;') Views: #{views}
   textarea #{article.body}
   hr
   if user
