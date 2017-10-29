@@ -22,6 +22,7 @@ html(lang='en')
                 a.nav-link.active(href='/') Home
                 if !user
                   a.nav-link.active(href='/articles/gallery') Gallery
+                  a.nav-link.active(href='/articles/add') Contribute Posts
                 if user
                   a.nav-link(href='/users/logout') Logout
           .container
@@ -30,7 +31,7 @@ html(lang='en')
             if !user
               h1.cover-heading Welcome
               p.lead
-                | ArticleHub is the perfect destination for reading and posting Articles/Poems/Experiences/Stories/Code and pretty much everything. Click on Register to create an account or Login through Facebook to contribute Posts. Click on Gallery to view existing Posts. 
+                | ArticleHub is the perfect destination for reading, posting and sharing Articles/Poems/Experiences/Stories/Code and pretty much everything. Click on Register to create an account or Login through Facebook to contribute Posts. Click on Gallery to view existing Posts. 
               p.lead
                 a.btn.btn-lg.btn-secondary(href='/users/register') Register
                 a.btn.btn-lg.btn-secondary(href='/auth/facebook',style="margin-left:50px;") Facebook Login

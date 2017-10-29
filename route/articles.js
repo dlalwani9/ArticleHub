@@ -7,7 +7,7 @@ var paginate = require('paginate')({
 	mongoose: mongoose
 });
 var query=null,currentPage=1;
-var pageSize=5,start=0,totalRec;
+var pageSize=8,start=0,totalRec;
 
 router.get('/add',ensureAuthenticated,(req,res)=>{
   res.render('add',{
