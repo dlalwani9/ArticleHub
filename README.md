@@ -3,7 +3,7 @@
 ArticleHub is a web application for reading, posting and sharing Articles/Poems/Experiences/Stories/Code and pretty much everything. 
 A user needs to be registered or needs to Login through facebook in order to contribute Posts. Sharing of posts can be achieved through facebook share plugin. Likes and Comments on posts is achieved by Facebook Like and Comments Plugin. Have a look-[ArticleHub](https://articlehub.herokuapp.com/).
 
-### Installattion
+### Installation
 
 Install dependicies
 
