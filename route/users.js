@@ -53,7 +53,7 @@ router.post('/register',(req,res)=>{
           else{
             User.findOne({email:req.body.email}).then((user)=>{
 
-              if(user && user.facebookId && user.facebookId.length>0){
+              if(user && user.facebookId){
 
                 bcrypt.genSalt(10, function(err, salt){
                   bcrypt.hash(password, salt, function(err, hash){
@@ -216,7 +216,7 @@ router.post('/forgot', function(req, res, next) {
           req.flash('danger', 'No account with that email address exists.');
           return res.redirect('/users/forgot');
         }
-        if(user.facebookId.length>0 && !user.username){
+        if(!user.facebookId && !user.username){
           req.flash('danger', 'You have not created an ArticleHub account. '+
           'You Logged in through Facebook Earlier. Please log in through Facebook to continue'+
           ' or Please Register in order to create an ArticleHub account.');
